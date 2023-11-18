@@ -32,16 +32,16 @@ function Login() {
 					password: pw,
 				}),
 			});
-			const message = await response.json();
-			console.log(message);
-			if (!message.isLogin) {
-				window.alert(message.message);
+			const responseData = await response.json();
+			console.log(responseData.message);
+			if (!responseData.result) {
+				window.alert(responseData.message);
 				router.push({
 					pathname: '../../',
 				});
 			} else {
-				window.alert(message.message);
-				const username = message.userData.username;
+				window.alert(responseData.message);
+				const username = responseData.userData.username;
 				if (typeof username === 'string') {
 					// ? 은 체이닝으로 값이 undefined가 아닐 경우에만 뒤에 것을 진행한다는 의미이다. 없으면 undefined 출력
 					const jwtCookie = document.cookie
