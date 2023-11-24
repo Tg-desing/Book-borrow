@@ -1,15 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import { GlobalContext } from '@/pages/_app';
 import { isStringObject } from 'util/types';
+import { GlobalContext } from '../../_app';
 
 function Login() {
 	const router = useRouter();
 	const [studentId, setStudentId] = useState<string>('');
 	const [pw, setPw] = useState<string>('');
 
-	const { username, setUsername, accessToken, setAccessToken } =
-		useContext(GlobalContext);
+	const context = useContext(GlobalContext);
+	const setUsername = context.setUsername;
+	const setIsLogin = context.setIsLogin;
 
 	function onChangeIdHandler(event: React.ChangeEvent<HTMLInputElement>) {
 		setStudentId(event.target.value);
@@ -32,13 +33,16 @@ function Login() {
 					password: pw,
 				}),
 			});
+
 			const responseData = await response.json();
 			console.log(responseData.message);
+			console.log(responseData.result);
 			if (!responseData.result) {
 				window.alert(responseData.message);
 				router.push({
 					pathname: '../../',
 				});
+				console.log('1');
 			} else {
 				window.alert(responseData.message);
 				const username = responseData.userData.username;
@@ -48,21 +52,20 @@ function Login() {
 						.split(': ')
 						.find((row) => row.startsWith('token='))
 						?.split('=')[1];
-					setUsername(username);
-
 					console.log(jwtCookie);
-
-					if (jwtCookie) {
-						setAccessToken(jwtCookie);
-					} else {
-						console.log("There's no token");
-						router.push({
-							pathname: '../../',
-						});
+					if (typeof setUsername !== 'undefined') {
+						setUsername(username);
 					}
 
+					if (typeof setIsLogin !== 'undefined') {
+						setIsLogin(true);
+					}
+
+					console.log(jwtCookie);
+					console.log(document.cookie);
+
 					router.push({
-						pathname: '../../borrow',
+						pathname: '../../',
 					});
 				} else {
 					console.log('username is strange! Try again');

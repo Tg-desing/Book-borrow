@@ -1,0 +1,46 @@
+.book-card {
+    width: 300px;
+    height: 400px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 16px;
+    transition: transform 0.3s;
+    cursor: pointer;
+    background-color: beige;
+  }
+
+  /* 카드 호버 시 약간 확대 효과 */
+  .book-card:hover {
+    transform: scale(1.05);
+  }
+
+  /* 책 표지 이미지 스타일 */
+  .book-cover {
+    margin: 10px;
+    width: 90%;
+    height: 50%;
+    object-fit: cover;
+  }
+
+  /* 책 정보 스타일 */
+  .book-info {
+    padding: 16px;
+  }
+
+  /* 책 제목 스타일 */
+  .book-title h1 {
+    color: black;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  /* 작가 정보 스타일 */
+  .book-author {
+    font-size: 14px;
+    font-style: italic;
+    color: #555;
+  }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { apiIp } from '../../../assets/apiKey';
+import apiIp from '@/assets/apiKey';
 
 function SignUp() {
 	const [name, setName] = useState<string>('');
@@ -23,7 +23,7 @@ function SignUp() {
 	async function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		try {
-			const response = await fetch(`http://localhost:3001/auth/signup`, {
+			const response = await fetch(`${apiIp}/auth/signup`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

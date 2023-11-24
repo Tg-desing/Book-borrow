@@ -1,9 +1,12 @@
+
+
 .header {
     position: relative;
     width: 100%;
     height: 10%;
     background-color: bisque;
     text-transform: capitalize;
+    display: flex;
 }
 
 .logo {
@@ -28,4 +31,27 @@
     padding-left: 0.25em;
     color: rgba(0, 0, 0, 0.4);
     padding-bottom: 10px;
+}
+
+.menu {
+    display: flex;
+    width: 30%;
+    height: 80%;
+    position: absolute;
+    right: 1%;
+    top: 5%;
+}
+
+.button {
+    padding: 3% 5%;
+    margin: 5%;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    background-color: beige;
+    height: 80%;
 }
