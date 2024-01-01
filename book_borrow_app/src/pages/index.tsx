@@ -8,6 +8,7 @@ interface bookData {
 	bookName: string;
 	category: string;
 	image: string;
+	description: string;
 }
 
 interface bookJson {
@@ -17,6 +18,7 @@ interface bookJson {
 	borrower: string;
 	startDate: Date;
 	endDate: Date;
+	description: string;
 }
 
 interface responseJson {
@@ -54,6 +56,7 @@ export default function Home({ bookDataList }: HomeProps) {
 							name={book.bookName}
 							url={book.image}
 							key={key}
+							description={book.description}
 						></BookCard>
 					);
 				})}

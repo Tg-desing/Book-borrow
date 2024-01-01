@@ -1,7 +1,6 @@
 import apiIp from '@/assets/apiKey';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { start } from 'repl';
 
 export default function BookPage() {
 	const router = useRouter();

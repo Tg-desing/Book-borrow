@@ -2,55 +2,46 @@ import { ReactNode, useContext, useEffect } from 'react';
 import classes from '../styles/layout.module.css';
 import { GlobalContext } from '../pages/_app';
 import { useRouter } from 'next/router';
-import { getJwtFromCookie } from '../jwt/jswontoken';
-import apiIp from '@/assets/apiKey';
+import { getIsJwtAuthentication, getRidOfAuthToken } from '../jwt/jswontoken';
+import Profile from './Profile';
+import { styled } from '@mui/material/styles';
+
+import {
+	AppBar,
+	Box,
+	Button,
+	Container,
+	Toolbar,
+	Typography,
+	Paper,
+	Stack,
+} from '@mui/material';
 
 type layoutType = {
 	children: ReactNode;
 };
 
-function isBoolean(result: any): result is boolean {
-	return typeof result === 'boolean';
-}
-
 function Layout(props: layoutType) {
 	const context = useContext(GlobalContext);
 	const router = useRouter();
-	const setIsLogin = context.setIsLogin;
-	const setUsername = context.setUsername;
-	const isLogin = context.isLogin;
-	const username = context.username;
+	const setIsLogin = context.setIsLogin!;
+	const setUsername = context.setUsername!;
+	const isLogin = context.isLogin!;
+	const username = context.username!;
+	const isManager = context.isManager!;
+	const setIsManager = context.setIsManager!;
 
-	// useEffect(() => {
-	// 	async function getAuthentication() {
-	// 		try {
-	// 			const jwtValue = getJwtFromCookie();
-	// 			const response = await fetch(`${apiIp}/auth/auth`, {
-	// 				method: 'POST',
-	// 				headers: {
-	// 					'Content-Type': 'application/json',
-	// 				},
-	// 				body: JSON.stringify({
-	// 					authentication: jwtValue,
-	// 				}),
-	// 			});
+	useEffect(() => {
+		async function getAuthentication() {
+			const result = await getIsJwtAuthentication();
 
-	// 			const { result, username } = await response.json();
-	// 			console.log(result);
-	// 			if (isBoolean(result)) {
-	// 				setIsLogin(result);
-	// 			}
+			setIsLogin(result.isLogin);
+			setIsManager(result.isManager);
+			setUsername(result.username);
+		}
 
-	// 			if (typeof username === 'string') {
-	// 				setUsername(username);
-	// 			}
-	// 		} catch (err) {
-	// 			window.alert(err);
-	// 		}
-	// 	}
-
-	// 	getAuthentication();
-	// }, [isLogin]);
+		getAuthentication();
+	}, [isLogin]);
 
 	function onClickLoginHandler() {
 		router.push({
@@ -70,33 +61,151 @@ function Layout(props: layoutType) {
 		});
 	}
 
+	async function onClickLogoutHandler() {
+		const result = await getRidOfAuthToken();
+		setIsLogin(result.isLogin);
+		setIsManager(result.isManager);
+		setUsername(result.username);
+		console.log('log out');
+	}
+
+	const pages = ['login', 'signup'];
+
 	return (
 		<>
-			<header className={classes.header}>
-				<div className={classes.logo}>
-					<h1>Book Share</h1>
-					<span>Borrow any book!</span>
-				</div>
-				{!isLogin && (
-					<div className={classes.menu}>
-						<button className={classes.button} onClick={onClickLoginHandler}>
-							Login
-						</button>
-						<button className={classes.button} onClick={onClickSignupHandler}>
-							Sign up!
-						</button>
-					</div>
-				)}
-
-				{isLogin && (
-					<div className={classes.profile}>
-						<h1>{username}</h1>
-						<button className={classes.button} onClick={onClickAddBookHandler}>
-							Add
-						</button>
-					</div>
-				)}
-			</header>
+			<AppBar position='static'>
+				<Container
+					maxWidth='x1'
+					sx={
+						{
+							// backgroundColor: '#87CEEB',
+						}
+					}
+				>
+					<Toolbar disableGutters>
+						<Typography
+							variant='h3'
+							noWrap
+							component='a'
+							href='#app-bar-with-responsive-menu'
+							sx={{
+								mr: 2,
+								display: {
+									xs: 'none',
+									md: 'flex',
+									position: 'relative',
+									height: '100%',
+								},
+								fontFamily: 'monospace',
+								fontWeight: 700,
+								letterSpacing: '.3rem',
+								color: 'inherit',
+								textDecoration: 'none',
+							}}
+							onClick={() => {
+								router.push('/');
+							}}
+						>
+							CoMit Books!
+						</Typography>
+						{!isLogin && (
+							<Box
+								sx={{
+									flexGrow: 1,
+									display: { xs: 'none', md: 'flex' },
+								}}
+							>
+								<Button
+									key={'login'}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+									onClick={onClickLoginHandler}
+								>
+									Login
+								</Button>
+								<Button
+									key={'login'}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+									onClick={onClickSignupHandler}
+								>
+									Sign up
+								</Button>
+							</Box>
+						)}
+						{isLogin && !isManager && (
+							<>
+								<Paper
+									variant='elevation'
+									sx={{
+										position: 'absolute',
+										width: '10%',
+										height: '90%',
+										right: 10,
+										borderRadius: '30px',
+									}}
+								>
+									<Stack direction='row'>
+										<Button
+											key={'logout'}
+											sx={{
+												my: 2,
+												color: 'black',
+												display: 'block',
+												varinat: 'outlined',
+												position: 'absolute',
+												left: '10%',
+											}}
+											onClick={onClickLogoutHandler}
+										>
+											Log out
+										</Button>
+										<Profile username={username}></Profile>
+									</Stack>
+								</Paper>
+							</>
+						)}
+						{isLogin && isManager && (
+							<>
+								<Paper
+									variant='elevation'
+									sx={{
+										position: 'absolute',
+										width: '10%',
+										height: '90%',
+										right: 10,
+										borderRadius: '30px',
+									}}
+								>
+									<Stack direction='row'>
+										<Button
+											key={'logout'}
+											sx={{
+												my: 2,
+												color: 'black',
+												display: 'block',
+												varinat: 'outlined',
+												position: 'absolute',
+												left: '10%',
+											}}
+											onClick={onClickAddBookHandler}
+										>
+											Add
+										</Button>
+										<Profile username={username}></Profile>
+									</Stack>
+								</Paper>
+							</>
+						)}
+					</Toolbar>
+				</Container>
+			</AppBar>
 			<main>{props.children}</main>
 		</>
 	);

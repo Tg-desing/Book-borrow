@@ -22,6 +22,8 @@ interface IGlobalContext {
 	setUsername?: React.Dispatch<SetStateAction<string>>;
 	isLogin?: boolean;
 	setIsLogin?: React.Dispatch<SetStateAction<boolean>>;
+	isManager?: boolean;
+	setIsManager?: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({});
@@ -29,20 +31,21 @@ export const GlobalContext = createContext<IGlobalContext>({});
 function MyApp({ Component, pageProps }: AppProps) {
 	const [username, setUsername] = useState<string>('');
 	const [isLogin, setIsLogin] = useState<boolean>(false);
+	const [isManager, setIsManager] = useState<boolean>(false);
 
 	const value = {
 		username: username,
 		setUsername: setUsername,
 		isLogin: isLogin,
 		setIsLogin: setIsLogin,
+		isManager: isManager,
+		setIsManager: setIsManager,
 	};
 
 	return (
 		<GlobalContext.Provider value={value}>
 			<Layout>
-				<NextUIProvider>
-					<Component {...pageProps} />
-				</NextUIProvider>
+				<Component {...pageProps} />
 			</Layout>
 		</GlobalContext.Provider>
 	);
